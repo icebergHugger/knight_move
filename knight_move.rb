@@ -1,21 +1,54 @@
 
+final_found = false
+
 class Node
 
-  attr_reader :location
+  attr_reader :location, :children
   attr_writer :children
+
+
+  @@count = 0
 
   def initialize(location)
     @location = location
     @children = [] #filled with 8 children
+
+    @@count += 1
+    puts @@count
   end
 
 end
 
-def generate_tree(start, finsih)
+def generate_tree(current, final)
 
-  #loop current cell location
+  diff_loc = [-21,-19,-12,-8,8,12,19,21]
 
-    #add each new cell to array
+  if current.location == final.location
+    puts "e"
+    final_found = true
+  end
+
+  #loop current node location
+  if !final_found && is_valid(current.location)
+    diff_loc.each do |diff|
+      new_node = Node.new(current.location + diff)
+      if is_valid(new_node.location)
+        current.children[diff_loc.index(diff)] = new_node
+        puts "new node #{new_node.location}"
+      end
+      generate_tree(new_node, final)
+    end
+  end
+
+end
+
+def is_valid(location)
+  num = location.abs.digits
+  if num.count == 2 && num[0].between?(1, 8) &&  num[1].between?(1, 8) && location > 0
+    return true
+  else
+    return false
+  end
 
 end
 
@@ -26,4 +59,4 @@ def knight_move(start, final)
 end
 
 
-knight_move([2,3],[1,4])
+knight_move(44, 14)
