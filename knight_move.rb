@@ -1,4 +1,4 @@
-
+count = 0
 final_found = false
 
 class Node
@@ -13,13 +13,20 @@ class Node
     @location = location
     @children = [] #filled with 8 children
 
-    @@count += 1
-    puts @@count
+    #@@count += 1
+    #puts @@count
   end
 
 end
 
 def generate_tree(current, final)
+
+  count = count + 1
+
+  if count > 25
+    count = 0
+    return true
+  end
 
   diff_loc = [-21,-19,-12,-8,8,12,19,21]
 
@@ -28,13 +35,15 @@ def generate_tree(current, final)
     final_found = true
   end
 
+
+
   #loop current node location
   if !final_found && is_valid(current.location)
     diff_loc.each do |diff|
       new_node = Node.new(current.location + diff)
       if is_valid(new_node.location)
         current.children[diff_loc.index(diff)] = new_node
-        puts "new node #{new_node.location}"
+        #puts "new node #{new_node.location}"
       end
       generate_tree(new_node, final)
     end
