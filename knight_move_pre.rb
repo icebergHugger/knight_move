@@ -28,3 +28,20 @@ class Board
   end
 
 end
+
+class Knight
+  def initialize
+  end
+
+  def legal_move?(first, last)
+    first_distance = first[0] - last[0]
+    second_distance = first[1] - last[1]
+
+    if first_distance.abs == 2 && second_distance.abs == 1 ||
+    first_distance.abs == 1 && second_distance.abs == 2
+      true
+    else
+      false
+    end
+  end
+end
