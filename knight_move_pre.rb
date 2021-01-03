@@ -29,6 +29,81 @@ class Board
 
 end
 
+class Graph
+    attr_accessor :verts, :knight
+
+    def initialize
+      @verts = []
+      @knight = Knight.new
+      pop_verts
+      pop_set
+    end
+
+    def mk_vert(value)
+      verts.push(Node.new(value))
+    end
+
+    def mk_edge(st_node, fn_node)
+      st_node.adjacent.push(fn_node)
+    end
+
+    def pop_verts
+      cb = Board.new(8)
+      cb.board.each { |spot| mk_vert(spot) }
+    end
+
+    def pop_set
+      @verts.each do |vert_a|
+        @verts.each do |vert_b|
+          mk_edge(vert_a, vert_b) if @knight.legal_move?(vert_a.value, vert_b.value)
+        end
+      end
+    end
+
+    def pretty_print
+      @verts.each do |vert|
+        print vert.value
+        print "Adjacent: "
+        vert.adjacent.each { |adj| print adj.value }
+        puts ""
+      end
+    end
+
+    def find(value)
+      verts.each { |current_node| return current_node if current_node.value == value}
+    end
+
+    def short_path(st_node, fn_node)
+      queue = [st_node]
+      pred = {}
+      path = []
+
+      @verts.each do |vert|
+        pred[vert] = nil
+      end
+
+      until queue.empty?
+        current = queue.shift
+        break if current == fn_node
+
+        current.adjecent.each do |adj|
+          next if pred.values.include?(adj)
+          queue.push(adj)
+          pred[adj] = current
+        end
+      end
+
+      until current == st_node
+        path.unshift(current.value)
+        current = pred[current]
+      end
+
+      path.unshift(st_node.value)
+
+      path
+    end
+end
+
 class Knight
   def initialize
   end
@@ -44,4 +119,5 @@ class Knight
       false
     end
   end
+
 end
