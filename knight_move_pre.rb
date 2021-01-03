@@ -121,3 +121,14 @@ class Knight
   end
 
 end
+
+def knight_move(start, finish)
+  k = Graph.new
+  k_moves = k.short_path(k.find(start), k.find(finish))
+  puts "Success in : #{k_moves.length - 1} moves. Path ----->"
+  k_moves.each do |move|
+    print "#{move}\n"}
+  end
+end
+
+knight_move([1, 1], [2, 3])
