@@ -1,5 +1,5 @@
 class Node
-  attr_accessor :value, :adjecent
+  attr_accessor :value, :adjacent
 
   def initialize(value)
     @value = value
@@ -86,7 +86,7 @@ class Graph
         current = queue.shift
         break if current == fn_node
 
-        current.adjecent.each do |adj|
+        current.adjacent.each do |adj|
           next if pred.values.include?(adj)
           queue.push(adj)
           pred[adj] = current
@@ -127,8 +127,38 @@ def knight_move(start, finish)
   k_moves = k.short_path(k.find(start), k.find(finish))
   puts "Success in : #{k_moves.length - 1} moves. Path ----->"
   k_moves.each do |move|
-    print "#{move}\n"}
+    if move != k_moves[-1]
+      print "#{move}\n|\nV\n"
+    else
+      print "#{move}\n"
+    end
   end
 end
 
-knight_move([1, 1], [2, 3])
+def input
+  print "Enter start location: "
+  start = gets.chomp.to_i
+  st_array = start.to_s.split('').map(&:to_i)
+  print "Enter final location: "
+  final = gets.chomp.to_i
+  fn_array = final.to_s.split('').map(&:to_i)
+
+  if valid_input?(st_array) && valid_input?(fn_array)
+    knight_move(st_array, fn_array)
+  else
+    puts "Invalid input try again."
+    input
+  end
+
+end
+
+def valid_input?(value)
+  if (1..8).include?(value[0]) && (1..8).include?(value[1]) && value.length == 2  
+    return true
+  else
+    return false
+  end
+
+end
+
+input
